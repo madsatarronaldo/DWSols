@@ -73,6 +73,7 @@ class AuthenticationController extends Controller
             if(!$user->is_email_verified)  
             {
                 $verifyUser->user->is_email_verified = 1;
+                $verifyUser->user->email_verified_at = Carbon::now()->toDateTimeString();
                 $verifyUser->user->save();
                 return redirect('/')->with('Success' ,'Email Verified. Login Now');
             } 

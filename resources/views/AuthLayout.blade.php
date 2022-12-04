@@ -16,6 +16,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
 	</head>
+	@yield('dashbaord')
 	<body class="img js-fullheight" style="background-image: url(images/bg.jpg); overflow:hidden; position:unset;" >
 	<section class="ftco-section">
 		<div class="container">

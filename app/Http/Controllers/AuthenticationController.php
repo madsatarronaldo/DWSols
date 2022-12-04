@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Session;
 use App\Models\User;
+use App\Models\CompaniesData;
 use App\Models\VerifyUser;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -113,7 +114,7 @@ class AuthenticationController extends Controller
                         $request->Session()->put('useremail' , $user->email);
                         if(Session::has(['userid' , 'useremail']))
                         {
-                            return view('dashboard');
+                            return redirect('dashboard');
                         }
                         else
                         {
@@ -142,35 +143,39 @@ class AuthenticationController extends Controller
     /*----------------------------------------------------------------------------------------------*/
     public function UserDashboard()
     {
-        dd("here");
-        return view('dashboard');
-        // $client = new Client();
-        // $url = 'https://www.worldometers.info/coronavirus/';
-        // $page = $client->request('GET', $url);
-        // echo "<pre>";
-        // print_r($page);
-        // $response = Http::asForm()->post('https://eservices.secp.gov.pk/eServices/NameSearch.jsp', [
-        //     'searchOption' => 'Including Exact String',
-        //     'searchName' => 'air',
-        // ]);
-        // dd($response->body());
-
-        // $client = new Client();
-        // $res = $client->request('POST', 'https://eservices.secp.gov.pk/eServices/NameSearch.jsp', [
-        //     'form_params' => [
-        //         'searchOption' => 'Including Exact String',
-        //         'searchName' => 'air',
-        //     ]
-        // ]);
-        // echo $res->getStatusCode();
-        // 200
-        // dd($res->status());
-        // 'application/json; charset=utf8'
-        // echo $res->getBody();
-        
+        $Data = CompaniesData::all();
+        $cro = [];
+        foreach($Data as $dat)
+        {
+            if(!in_array($dat->cro , $cro))
+            {
+                array_push($cro , $dat->cro);
+            }
+        }
+        $data = CompaniesData::paginate(15);
+        return view('dashboard' , compact(['data' , 'cro']));
+    }
+    /*----------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------*/
+    /*----------------------------------------------------------------------------------------------*/
+    public function UserFilter(Request $request)
+    {
+        if( $request->startdate == NULL || $request->enddate==NULL)
+        {
+            return redirect('/dashboard')->with('Fail' , 'Dates Required');
+        }
+        $data = CompaniesData::where('name','LIKE',"%{$request->company_name}%")->where(['status'=>$request->status , 
+               'cro'=>$request->cro])->whereBetween('reg_date' , [$request->startdate , $request->enddate])->paginate(15);
+        $cro = [];
+        $Data = CompaniesData::all();
+        foreach($Data as $dat)
+        {
+            if(!in_array($dat->cro , $cro))
+            {
+                array_push($cro , $dat->cro);
+            }
+        }
+        return view('dashboard' , compact(['data' , 'cro']));
     }
 }
 
-// Route::get('/registeration', function () {
-//     return view('register');
-// });

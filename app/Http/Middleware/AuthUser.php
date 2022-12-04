@@ -16,10 +16,13 @@ class AuthUser
      */
     public function handle(Request $request, Closure $next)
     {
-        if(Session::has(['userid','useremail']))
+        if(Session::has('userid'))
         {
-            return redirect('/dashboard');
+            return $next($request);
         }
-        return redirect('/')->with('Fail' , 'User Login Required');
+        else
+        {
+            return redirect('/')->with('Fail' , 'User Login Required');
+        }
     }
 }

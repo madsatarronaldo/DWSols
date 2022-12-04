@@ -22,7 +22,11 @@ Route::get('/registeration', function () {
 });
 Route::get('/registeration/account/verify/{token}', [App\Http\Controllers\AuthenticationController::class, 'verifyAccount'])->name('user.verify'); 
 Route::post('/login' , 'App\Http\Controllers\AuthenticationController@UserLogin')->name('userlogin');
-Route::post('/registeration/user' , 'App\Http\Controllers\AuthenticationController@UserRegisteration')->name('userregisteration');
+Route::post('/registeration/verify/email' , 'App\Http\Controllers\AuthenticationController@UserRegisteration')->name('userregisteration');
 
+Route::group(['middleware' => 'authuser'], function(){
 
-Route::get('/dashboard', 'App\Http\Controllers\AuthenticationController@UserDashboard')->middleware('authuser');
+Route::get('/dashboard', 'App\Http\Controllers\AuthenticationController@UserDashboard');
+Route::post('/dashboard/filter', 'App\Http\Controllers\AuthenticationController@UserFilter')->name('userfliter');
+
+});

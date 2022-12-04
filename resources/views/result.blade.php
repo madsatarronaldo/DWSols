@@ -13,13 +13,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="col-md-6 col-lg-4" style="font-size:20px; text-align:center; padding-top: 0.5em; margin-left: 22em;" >
-    @if(Session::get('Fail'))
-    <div class=" alert login-wrap p-0 ml-1" style="background-color:red; color:white" >
-        <strong clss="mb-4 text-center"> {{Session::get('Fail')}}</strong>
-    </div>  
-    @endif
-</div>
+    
     <div style="padding-top:30px;"></div>
     <div class="container">
         <form action="{{route('userfliter')}}" method="post">
@@ -89,12 +83,5 @@
             </table>
         </div>
     </div>
-    <script>
-    window.setTimeout(function() {
-      $(".alert").fadeTo(500, 100).slideUp(500, function(){
-          $(this).remove(); 
-      });
-    }, 3000);
-  </script>
 </body>
 </html>
